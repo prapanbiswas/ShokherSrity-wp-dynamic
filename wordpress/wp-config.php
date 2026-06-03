@@ -26,6 +26,14 @@ define('DISALLOW_FILE_MODS', true);
 
 define('WP_AUTO_UPDATE_CORE', false);
 
+// Dynamic URL — works on localhost:5000 and Replit preview domain
+if (!defined('WP_HOME')) {
+    $ss_scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $ss_host   = $_SERVER['HTTP_HOST'] ?? 'localhost:5000';
+    define('WP_HOME',    $ss_scheme . '://' . $ss_host);
+    define('WP_SITEURL', $ss_scheme . '://' . $ss_host);
+}
+
 if (!defined('ABSPATH')) {
     define('ABSPATH', __DIR__ . '/');
 }

@@ -1,5 +1,6 @@
 {pkgs}: {
   deps = [
+    pkgs.ffmpeg
     pkgs.unzip
     pkgs.wget
     pkgs.curl
