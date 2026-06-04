@@ -274,17 +274,18 @@ function initParallax() {
 
 // ============================================
 // RESPONSIVE HERO IMAGE SWAP
-// Desktop: landscape (L.webp) | Mobile: portrait (19.webp)
+// Uses SS_HERO global injected by WordPress (admin -> Hero Images)
 // ============================================
 function initResponsiveHero() {
     const hero = document.querySelector('.hero');
     if (!hero) return;
 
-    const landscapeImg = 'attached_assets/L.webp';
-    const portraitImg = 'attached_assets/Wedding Photoshooot/19.webp';
-
+    if (typeof SS_HERO === 'undefined') return;
+    const desktopImg = SS_HERO.desktop || '';
+    const mobileImg  = SS_HERO.mobile  || desktopImg;
+    if (!desktopImg) return;
     function swapHeroImage(isDesktop) {
-        const img = isDesktop ? landscapeImg : portraitImg;
+        const img = isDesktop ? desktopImg : mobileImg;
         hero.style.setProperty('--hero-bg-image', `url('${img}')`);
     }
 
@@ -623,18 +624,4 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-
-// ============================================
-// LEGACY IMAGE LOADER (For static non-lazy images)
-// ============================================
-function initImageLoading() {
-    const images = document.querySelectorAll('img[src]:not([data-src]):not(.loaded)');
-    images.forEach(img => {
-        if (img.complete) {
-            img.classList.add('loaded');
-        } else {
-            img.addEventListener('load', () => img.classList.add('loaded'));
-        }
-    });
-}
 

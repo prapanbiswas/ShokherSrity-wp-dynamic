@@ -228,6 +228,41 @@ function ss_ajax_upload_image() {
         wp_send_json_error('Failed to save file');
     }
 
+    // GD optimization: resize if > 2000px, convert to WebP if possible
+    if (function_exists('imagecreatefromstring')) {
+        $orig = @file_get_contents($dest_path);
+        $img  = $orig ? @imagecreatefromstring($orig) : false;
+        if ($img) {
+            $ow = imagesx($img);
+            $oh = imagesy($img);
+            $max = 2000;
+            if ($ow > $max || $oh > $max) {
+                $ratio = $ow > $oh ? $max / $ow : $max / $oh;
+                $nw = (int)round($ow * $ratio);
+                $nh = (int)round($oh * $ratio);
+                $resized = imagecreatetruecolor($nw, $nh);
+                imagecopyresampled($resized, $img, 0, 0, 0, 0, $nw, $nh, $ow, $oh);
+                imagedestroy($img);
+                $img = $resized;
+                $ow = $nw; $oh = $nh;
+            }
+            // Save as WebP if supported
+            $webp_ok = function_exists('imagewebp');
+            if ($webp_ok) {
+                $new_path = preg_replace('/\.(?:jpe?g|png|webp)$/i', '.webp', $dest_path);
+                imagewebp($img, $new_path, 85);
+                if ($new_path !== $dest_path) {
+                    @unlink($dest_path);
+                    $dest_path = $new_path;
+                    $filename  = basename($dest_path);
+                }
+            } else {
+                imagejpeg($img, $dest_path, 88);
+            }
+            imagedestroy($img);
+        }
+    }
+
     // Auto-detect dimensions
     $info = @getimagesize($dest_path);
     $width  = $info[0] ?? 0;

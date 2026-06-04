@@ -1,0 +1,3 @@
+- [WordPress setup quirks](wp-setup.md) — HTTPS proxy fix + SQLite drop-in + 8-worker PHP server are all required
+- [Admin credentials](admin-creds.md) — admin password and custom admin panel URL
+- [Image catalog structure](image-catalog.md) — rebuild script, folder name quirks, GD optimization on upload

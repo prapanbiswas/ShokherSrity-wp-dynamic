@@ -114,6 +114,7 @@ if ($filter_cat !== 'all') {
                     Save Hero Pair
                 </button>
                 <span id="hero-save-msg" style="font-size:0.85rem;color:green;display:none;">✓ Saved!</span>
+                <span id="pair-hint" style="font-size:0.85rem;color:#D4AF37;display:none;"></span>
             </div>
         </div>
 
@@ -131,7 +132,7 @@ if ($filter_cat !== 'all') {
 </div>
 
 <!-- Upload Modal -->
-<div id="upload-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;" onclick="if(event.target===this)closeUploadModal()">
+<div id="upload-modal" style="display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;" onclick="if(event.target===this)closeUploadModal()">
     <div style="background:white;border-radius:16px;padding:2rem;width:520px;max-width:95vw;max-height:85vh;overflow-y:auto;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
             <h3 style="margin:0;font-size:1.1rem;">Upload Images</h3>
@@ -163,7 +164,7 @@ if ($filter_cat !== 'all') {
 </div>
 
 <!-- Hero Gallery Picker -->
-<div id="hero-picker-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9998;align-items:center;justify-content:center;">
+<div id="hero-picker-modal" style="display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:9998;align-items:center;justify-content:center;">
     <div style="background:white;border-radius:16px;padding:2rem;width:800px;max-width:95vw;max-height:85vh;overflow-y:auto;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
             <h3 style="margin:0;" id="picker-title">Choose Desktop Hero</h3>
@@ -301,7 +302,8 @@ function heroPickFromGallery(src) {
     closeHeroPicker();
 }
 function setHeroFromGallery(src, w, h) {
-    const target = (w >= h) ? 'desktop' : 'mobile';
+    const isLandscape = (w >= h);
+    const target = isLandscape ? 'desktop' : 'mobile';
     if (target === 'desktop') {
         heroDesktopSrc = src;
         const el = document.getElementById('preview-desktop');
@@ -316,6 +318,16 @@ function setHeroFromGallery(src, w, h) {
     document.querySelectorAll('.ss-tab-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.ss-tab')[1].classList.add('active');
     document.getElementById('tab-hero').classList.add('active');
+    // Smart pairing: auto-prompt for companion slot
+    const companionTarget = isLandscape ? 'mobile' : 'desktop';
+    const companionLabel  = isLandscape ? 'portrait (mobile)' : 'landscape (desktop)';
+    const hint = document.getElementById('pair-hint');
+    if (hint) {
+        hint.textContent = '✓ ' + (isLandscape ? 'Desktop' : 'Mobile') + ' hero set! Now pick a ' + companionLabel + ' image.';
+        hint.style.display = 'inline';
+        setTimeout(() => { openHeroPicker(companionTarget); }, 700);
+        setTimeout(() => { hint.style.display = 'none'; }, 6000);
+    }
 }
 
 async function heroFileUpload(input, target) {
