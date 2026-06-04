@@ -26,12 +26,17 @@ define('DISALLOW_FILE_MODS', true);
 
 define('WP_AUTO_UPDATE_CORE', false);
 
+// Reverse-proxy awareness — Replit terminates TLS and forwards via HTTP internally.
+// Tell PHP/WordPress the connection is HTTPS so it never issues an http→https redirect.
+if (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 // Dynamic URL — works on localhost:5000 and Replit preview domain
 if (!defined('WP_HOME')) {
-    $ss_forwarded = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
-    $ss_https     = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $ss_forwarded === 'https';
-    $ss_scheme    = $ss_https ? 'https' : 'http';
-    $ss_host      = $_SERVER['HTTP_HOST'] ?? 'localhost:5000';
+    $ss_https  = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    $ss_scheme = $ss_https ? 'https' : 'http';
+    $ss_host   = $_SERVER['HTTP_HOST'] ?? 'localhost:5000';
     define('WP_HOME',    $ss_scheme . '://' . $ss_host);
     define('WP_SITEURL', $ss_scheme . '://' . $ss_host);
 }
