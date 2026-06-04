@@ -13,4 +13,4 @@ mkdir -p "$WP_DIR/wp-content/database"
 chmod 755 "$WP_DIR/wp-content/database"
 
 echo "==> WordPress running at http://localhost:$PHP_PORT"
-php -S 0.0.0.0:$PHP_PORT -t "$WP_DIR" "$WP_DIR/router.php"
+PHP_CLI_SERVER_WORKERS=8 php -S 0.0.0.0:$PHP_PORT -t "$WP_DIR" "$WP_DIR/router.php"
