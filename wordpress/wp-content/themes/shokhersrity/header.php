@@ -14,9 +14,21 @@
 <div class="nav-top-backdrop" aria-hidden="true"></div>
 <?php endif; ?>
 
+<?php
+$logo_url  = get_option('ss_logo_url', '');
+$site_name = get_option('ss_settings', [])['site_name'] ?? 'ShokherSrity';
+?>
 <header>
     <nav>
-        <a href="<?php echo esc_url(home_url('/')); ?>" class="logo">ShokherSrity</a>
+        <?php if ($logo_url): ?>
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="logo logo-img" aria-label="<?php echo esc_attr($site_name); ?>">
+            <img src="<?php echo esc_url($logo_url); ?>"
+                 alt="<?php echo esc_attr($site_name); ?>"
+                 style="height:44px;width:auto;max-width:180px;object-fit:contain;vertical-align:middle;display:block;">
+        </a>
+        <?php else: ?>
+        <a href="<?php echo esc_url(home_url('/')); ?>" class="logo"><?php echo esc_html($site_name); ?></a>
+        <?php endif; ?>
         <button class="mobile-menu-btn" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>

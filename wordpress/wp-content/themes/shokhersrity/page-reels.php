@@ -14,7 +14,6 @@ $videos = ss_get_videos();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>">
-    <link rel="icon" href="<?php echo esc_url(content_url('uploads/logo.webp')); ?>" type="image/webp">
     <?php wp_head(); ?>
 </head>
 <body class="reels-body">
@@ -24,7 +23,12 @@ $videos = ss_get_videos();
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
     </a>
     <div class="reels-topbar-title"><span class="reels-topbar-label">Reels</span></div>
-    <a href="<?php echo esc_url(home_url('/')); ?>" class="reels-logo-link"><span class="reels-logo-text">ShokherSrity</span></a>
+    <?php $reel_logo = get_option('ss_logo_url',''); $reel_name = get_option('ss_settings',[])['site_name'] ?? 'ShokherSrity'; ?>
+    <a href="<?php echo esc_url(home_url('/')); ?>" class="reels-logo-link" aria-label="<?php echo esc_attr($reel_name); ?>">
+        <?php if ($reel_logo): ?>
+        <img src="<?php echo esc_url($reel_logo); ?>" alt="<?php echo esc_attr($reel_name); ?>" style="height:28px;width:auto;object-fit:contain;display:block;filter:brightness(0) invert(1);" loading="lazy">
+        <?php else: ?><span class="reels-logo-text"><?php echo esc_html($reel_name); ?></span><?php endif; ?>
+    </a>
 </div>
 
 <div class="reel-progress-bar" id="reel-progress">
@@ -38,7 +42,7 @@ $videos = ss_get_videos();
         $src   = esc_url($v['src']);
         $title = esc_html($v['title'] ?? 'Cinematic Wedding Reel');
         $desc  = esc_html($v['description'] ?? 'A beautiful moment captured in every frame ✨');
-        $logo  = esc_url(content_url('uploads/logo.webp'));
+        $logo  = esc_url(get_option('ss_logo_url', content_url('uploads/logo.webp')));
     ?>
     <div class="reel-item" data-index="<?php echo $i; ?>">
         <video class="reel-video" src="<?php echo $src; ?>" loop playsinline preload="metadata" poster=""></video>

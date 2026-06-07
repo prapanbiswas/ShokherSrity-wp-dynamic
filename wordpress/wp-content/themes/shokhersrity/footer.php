@@ -1,8 +1,21 @@
-<?php $s = ss_get_settings(); ?>
+<?php
+$s         = ss_get_settings();
+$logo_url  = get_option('ss_logo_url', '');
+$site_name = $s['site_name'] ?? 'ShokherSrity';
+?>
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-brand">
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="logo">ShokherSrity</a>
+            <?php if ($logo_url): ?>
+            <a href="<?php echo esc_url(home_url('/')); ?>" class="logo logo-img" aria-label="<?php echo esc_attr($site_name); ?>">
+                <img src="<?php echo esc_url($logo_url); ?>"
+                     alt="<?php echo esc_attr($site_name); ?>"
+                     style="height:40px;width:auto;max-width:160px;object-fit:contain;display:block;margin-bottom:.5rem;filter:brightness(0) invert(1);"
+                     loading="lazy">
+            </a>
+            <?php else: ?>
+            <a href="<?php echo esc_url(home_url('/')); ?>" class="logo"><?php echo esc_html($site_name); ?></a>
+            <?php endif; ?>
             <p>Premium wedding photography services in Bangladesh. Capturing your love story with elegance, artistry, and passion.</p>
         </div>
         <div class="footer-section">
@@ -27,19 +40,23 @@
         <div class="footer-section">
             <h4 class="footer-title">Contact</h4>
             <div class="footer-links">
+                <?php if (!empty($s['email'])): ?>
                 <a href="mailto:<?php echo esc_attr($s['email']); ?>">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                     <?php echo esc_html($s['email']); ?>
                 </a>
+                <?php endif; ?>
+                <?php if (!empty($s['phone1'])): ?>
                 <a href="tel:<?php echo esc_attr($s['phone1']); ?>">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
                     <?php echo esc_html($s['phone1']); ?>
                 </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
     <div class="footer-bottom">
-        <p class="footer-copyright">&copy; <span data-copyright-year><?php echo date('Y'); ?></span> ShokherSrity. All rights reserved.</p>
+        <p class="footer-copyright">&copy; <span data-copyright-year><?php echo date('Y'); ?></span> <?php echo esc_html($site_name); ?>. All rights reserved.</p>
         <div class="footer-social">
             <?php if (!empty($s['facebook'])): ?>
             <a href="<?php echo esc_url($s['facebook']); ?>" target="_blank" rel="noopener" aria-label="Facebook">

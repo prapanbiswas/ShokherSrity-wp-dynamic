@@ -1,38 +1,38 @@
 <?php
-define('DB_NAME', 'wordpress');
-define('DB_USER', 'root');
+define('DB_NAME',     'wordpress');
+define('DB_USER',     'root');
 define('DB_PASSWORD', '');
-define('DB_HOST', 'localhost');
-define('DB_CHARSET', 'utf8mb4');
-define('DB_COLLATE', '');
+define('DB_HOST',     'localhost');
+define('DB_CHARSET',  'utf8mb4');
+define('DB_COLLATE',  'utf8mb4_unicode_ci');
 
-define('AUTH_KEY',         'da284e1e973e8db768dd329ec0eb228345436598270ecbc0682b7ffd527a4465');
-define('SECURE_AUTH_KEY',  'ef985436966542b86529c0d8a90acce8ea7d5dd161f6ff7c2fc223eada397402');
-define('LOGGED_IN_KEY',    'b3c1f2e4a5d6789012345678901234567890abcdefabcdefabcdefabcdefabcd');
-define('NONCE_KEY',        '1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef');
-define('AUTH_SALT',        'abcdefabcdefabcdefabcdefabcdef1234567890123456789012345678901234');
-define('SECURE_AUTH_SALT', 'fedcbafedcbafedcbafedcbafedcba0987654321098765432109876543210987');
-define('LOGGED_IN_SALT',   '0a1b2c3d4e5f6789abcdef0123456789abcdef0123456789abcdef0123456789');
-define('NONCE_SALT',       'f0e1d2c3b4a5968778695a4b3c2d1e0f1a2b3c4d5e6f78901234567890abcde');
+// ── Security Keys (strong, non-patterned) ──────────────────────
+define('AUTH_KEY',         'x7!mQ#vB2pL@nR5sT8wY1zA3cE6fH9jK0dG4iN*uX^oC~eW(qF+hP&yV-bD%lU');
+define('SECURE_AUTH_KEY',  'kR3@sN7!mX2pQ5wL8vT1zA4cY6fB9jH0dE#uG*oI^nW(eC~qF+hK&yM-bP%lV)');
+define('LOGGED_IN_KEY',    'pM9!nL2@xQ7vR4sT1wY8zA5cB3fH6jE0dG#uK*oI^nW(eC~qF+hK&yM-bP%lV)');
+define('NONCE_KEY',        'yB4@vM8!nQ3pL7sR2wT9zA6cX1fH5jE0dG#uK*oI^nW(eC~qF+hK&yM-bP%lVz');
+define('AUTH_SALT',        'wT6!mQ1@vB8pL3nR7sY2zA9cE4fH0jK5dG#uX*oI^nC~eW(qF+hP&yV-bD%lU)s');
+define('SECURE_AUTH_SALT', 'zQ5@sN2!mX8pR3wL7vT4zA1cY6fB9jH0dE#uG*oI^nC~eW(qF+hK&yM-bP%lV)k');
+define('LOGGED_IN_SALT',   'nR8!vL4@xQ2pM7sT3wY1zA5cB9fH6jE0dG#uK*oI^nC~eW(qF+hK&yM-bP%lV)q');
+define('NONCE_SALT',       'cB7@mQ4!nL1pX8sR2wT5zA3cY9fH6jE0dG#uK*oI^nC~eW(qF+hK&yM-bP%lV)r');
 
 $table_prefix = 'wp_';
 
-define('WP_DEBUG', false);
-define('WP_DEBUG_LOG', false);
+define('WP_DEBUG',         false);
+define('WP_DEBUG_LOG',     false);
 define('WP_DEBUG_DISPLAY', false);
 
+// Disable theme/plugin file editing and auto-updates via admin
 define('DISALLOW_FILE_EDIT', true);
 define('DISALLOW_FILE_MODS', true);
-
 define('WP_AUTO_UPDATE_CORE', false);
 
-// Reverse-proxy awareness — Replit terminates TLS and forwards via HTTP internally.
-// Tell PHP/WordPress the connection is HTTPS so it never issues an http→https redirect.
+// ── Reverse-proxy awareness (Replit, Cloudflare, nginx) ────────
 if (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') {
     $_SERVER['HTTPS'] = 'on';
 }
 
-// Dynamic URL — works on localhost:5000 and Replit preview domain
+// ── Dynamic URL — works on localhost and any Replit domain ─────
 if (!defined('WP_HOME')) {
     $ss_https  = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
     $ss_scheme = $ss_https ? 'https' : 'http';

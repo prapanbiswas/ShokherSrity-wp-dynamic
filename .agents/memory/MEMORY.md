@@ -1,3 +1,5 @@
 - [WordPress setup quirks](wp-setup.md) — HTTPS proxy fix + SQLite drop-in + 8-worker PHP server are all required
 - [Admin credentials](admin-creds.md) — admin password and custom admin panel URL
 - [Image catalog structure](image-catalog.md) — rebuild script, folder name quirks, GD optimization on upload
+- [ShokherSrity plugin v3 architecture](shokhersrity-plugin-v3.md) — camera SVG base64 icon, 7 admin pages, logo system, sitemap, security headers, admin-post handlers
+- [Logo system](shokhersrity-logo.md) — ss_logo_url / ss_favicon_url options, AJAX handler ss_upload_logo, propagates to header/footer/reels/admin sidebar/favicon
